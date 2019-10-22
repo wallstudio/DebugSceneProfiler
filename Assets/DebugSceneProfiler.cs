@@ -9,7 +9,7 @@ public class DebugSceneProfiler : IDisposable
     [RuntimeInitializeOnLoadMethod]
     static void SetApplicationStartTime(){ applicationStartTime = DateTime.Now; }
 
-	public static List<DebugSceneProfiler> profiles = new List<DebugSceneProfiler>();
+    public static List<DebugSceneProfiler> profiles = new List<DebugSceneProfiler>();
 
     public string label;
     public double startTime;
@@ -22,7 +22,7 @@ public class DebugSceneProfiler : IDisposable
     {
         public string label;
         public double startTime;
-		public double endTime;
+        public double endTime;
         public double spanTime;
 
         public LapInfo(string label, double startTime, double endTime)
@@ -33,10 +33,10 @@ public class DebugSceneProfiler : IDisposable
             this.spanTime = endTime - startTime;
         }
 
-		public override string ToString()
-		{
-			return JsonUtility.ToJson(this);
-		}
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this);
+        }
     }
     public List<LapInfo> laps = new List<LapInfo>();
 
@@ -45,7 +45,7 @@ public class DebugSceneProfiler : IDisposable
     {
         this.label = label ?? string.Empty;
         startTime = (DateTime.Now - applicationStartTime).TotalSeconds;
-		profiles.Add(this);
+        profiles.Add(this);
     }
 
     public void Dispose()
@@ -59,12 +59,12 @@ public class DebugSceneProfiler : IDisposable
     public void Lap(string label = null)
     {
         double lapStartTime = laps.Count == 0 ? startTime : laps.Last().endTime;
-		double lapEndTime = (DateTime.Now - applicationStartTime).TotalSeconds;
+        double lapEndTime = (DateTime.Now - applicationStartTime).TotalSeconds;
         double lapSpanTime = lapEndTime - lapStartTime;
         LapInfo lap = new LapInfo(
-			label: string.Format("[{0:000.00}s] {1}", lapSpanTime, label ?? string.Empty),
-			startTime: lapStartTime,
-			endTime: lapEndTime);
+            label: string.Format("[{0:000.00}s] {1}", lapSpanTime, label ?? string.Empty),
+            startTime: lapStartTime,
+            endTime: lapEndTime);
         laps.Add(lap);
     }
 
