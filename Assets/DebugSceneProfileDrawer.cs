@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -65,6 +66,9 @@ public class DebugSceneProfileDrawer : MonoBehaviour
     GUIStyle borderStyle;
     GUIStyle profStyle;
     List<GUIStyle> lapStyles;
+	double startTime;
+	double endTime;
+	bool isAutoSpan = true;
 
     void OnGUI()
     {
@@ -82,7 +86,7 @@ public class DebugSceneProfileDrawer : MonoBehaviour
         }
 
         const int WINDOW_LABEL_H = 30;
-        const int WINDOW_HEADER_H = 50;
+        const int WINDOW_HEADER_H = 70;
         const int PROFILE_HEADER_H = 20;
         const int LAP_H = 15;
         Rect window = GUILayout.Window(0, new Rect(windowRect.position, windowRect.size), id =>
@@ -93,11 +97,27 @@ public class DebugSceneProfileDrawer : MonoBehaviour
                 return;
             }
 
+			GUILayout.BeginHorizontal();
+			isAutoSpan = GUILayout.Toggle(isAutoSpan, "オート範囲");
+			if(isAutoSpan)
+			{
+				startTime = profiles.Select(p => p.endTime).Min();
+				endTime = profiles.Select(p => p.endTime).Max();
+			}
+			else
+			{
+				double.TryParse(GUILayout.TextField(startTime.ToString()), out startTime);
+				GUILayout.Label("始点");
+				double.TryParse(GUILayout.TextField(endTime.ToString()), out endTime);
+				GUILayout.Label("終点");
+			}
+			GUILayout.EndHorizontal();
+
             RectInt contentsRect = new RectInt(Vector2Int.one * 10, windowRect.size - new Vector2Int(100, 30));
-            double totalSpan = profiles.Select(p => p.endTime).Max() - profiles.Select(p => p.startTime).Min();
+            double totalSpan = endTime - startTime;
             Vector2Int contentsOffset = contentsRect.position;
             profiles.Sort((a, b) => a.startTime.CompareTo(b.startTime));
-            Vector2Int lastRightTop = Vector2Int.zero;
+            Vector2Int lastRightTop = new Vector2Int(int.MinValue, int.MinValue);
             int bottom = 0;
 
             // 罫線
@@ -135,7 +155,7 @@ public class DebugSceneProfileDrawer : MonoBehaviour
             {
                 // 各プロファイルの描画
                 graphOffset *= new Vector2Int(0, 1);
-                double startTimeRate = profiles[i].startTime / totalSpan;
+                double startTimeRate = (profiles[i].startTime - startTime) / totalSpan;
                 double spanTimeRate = profiles[i].spanTime / totalSpan;
                 graphOffset = new Vector2Int((int)(contentsRect.x + startTimeRate * contentsRect.width), graphOffset.y);
                 // 重なりが無ければ上に詰める
@@ -167,7 +187,7 @@ public class DebugSceneProfileDrawer : MonoBehaviour
                 for(int j = 0, jl = profiles[i].laps.Count; j < jl; j++)
                 {
                     // 各ラップタイムの描画
-                    double lapStartTimeRate = profiles[i].laps[j].startTime / totalSpan;
+                    double lapStartTimeRate = (profiles[i].laps[j].startTime - startTime) / totalSpan;
                     double lapSpanTimeRate = profiles[i].laps[j].spanTime / totalSpan;
                     graphOffset = new Vector2Int((int)(contentsRect.x + lapStartTimeRate * contentsRect.width), graphOffset.y);
                     Rect lapRect = new Rect(
