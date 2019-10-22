@@ -107,9 +107,9 @@ public class DebugSceneProfileDrawer : MonoBehaviour
 			else
 			{
 				double.TryParse(GUILayout.TextField(startTime.ToString()), out startTime);
-				GUILayout.Label("始点");
+				GUILayout.Label("始点(s)");
 				double.TryParse(GUILayout.TextField(endTime.ToString()), out endTime);
-				GUILayout.Label("終点");
+				GUILayout.Label("終点(s)");
 			}
 			GUILayout.EndHorizontal();
 
@@ -171,7 +171,10 @@ public class DebugSceneProfileDrawer : MonoBehaviour
                 Rect meginedProfileRect = new Rect(profileRect.position + Vector2.one, profileRect.size - Vector2.one * 2);
                 if(GUI.Button(meginedProfileRect, profiles[i].label, profStyle))
                 {
-                    Debug.Log(profiles[i]);
+                    isAutoSpan = false;
+					double margin = profiles[i].spanTime * 0.2f;
+					startTime = Math.Max(profiles[i].startTime - margin, 0);
+					endTime = profiles[i].endTime + margin;
                 }
                 graphOffset += new Vector2Int(0, PROFILE_HEADER_H);
                 if(lastRightTop.x < profileRect.xMax)
