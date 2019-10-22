@@ -89,7 +89,7 @@ public class DebugSceneProfileDrawer : MonoBehaviour
         const int WINDOW_HEADER_H = 70;
         const int PROFILE_HEADER_H = 20;
         const int LAP_H = 15;
-        Rect window = GUILayout.Window(0, new Rect(windowRect.position, windowRect.size), id =>
+        GUILayout.Window(0, new Rect(windowRect.position, windowRect.size), id =>
         {
             if(profiles == null || profiles.Count == 0)
             {
