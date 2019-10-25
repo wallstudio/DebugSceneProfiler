@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 216abac7fd13a1d4499d391686c26ecc
+ScriptedImporter:
+  fileIDToRecycleName:
+    100002: main obj/New Game Object
+    400002: main obj/New Game Object/Transform
+    2100000: my Material
+    2300002: main obj/New Game Object/MeshRenderer
+    3300002: main obj/New Game Object/MeshFilter
+    4300000: mesh
+    100100000: main obj
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Standard
+    second: {fileID: 2100000, guid: 810b0e51132f3994ba6d2b9d42c520f7, type: 2}
+  - first:
+      type: UnityEngine:Mesh
+      assembly: UnityEngine.CoreModule
+      name: 
+    second: {fileID: 4300000, guid: 54bbb2fbcee480b43a566ecf8630f3da, type: 2}
+  userData: 4563
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 3a452c4127c0094409784d944aba6b56, type: 3}
+  scale: 1
